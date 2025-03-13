@@ -31,7 +31,7 @@ const Notes = () => {
     }
 
     axios
-      .get("http://localhost:5000/api/notes", {
+      .get("https://newnoteapp-3.onrender.com/api/notes", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setNotes(res.data))
@@ -69,7 +69,7 @@ const Notes = () => {
       if (isEditing) {
         // Update Note
         await axios.put(
-          `http://localhost:5000/api/notes/${currentNote.id}`,
+          `https://newnoteapp-3.onrender.com/api/notes/${currentNote.id}`,
           { title: currentNote.title, content: currentNote.content },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -87,7 +87,7 @@ const Notes = () => {
       } else {
         // Add Note
         const res = await axios.post(
-          "http://localhost:5000/api/notes",
+          "https://newnoteapp-3.onrender.com/api/notes",
           { title: currentNote.title, content: currentNote.content },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -106,7 +106,7 @@ const Notes = () => {
   // Delete Note
   const deleteNote = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/notes/${id}`, {
+      await axios.delete(`https://newnoteapp-3.onrender.com/api/notes/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNotes(notes.filter((note) => note._id !== id));
