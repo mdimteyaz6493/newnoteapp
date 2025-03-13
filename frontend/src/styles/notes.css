@@ -1,0 +1,197 @@
+.main-notes-cont {
+  background-color: rgb(233, 245, 208);
+}
+.notes-cont-head {
+  /* background-color: orange; */
+  height: 80px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0px 30px;
+}
+.notes-cont-head button {
+  cursor: pointer;
+  font-size: 60px;
+  width: 100px;
+  background: none;
+  outline: none;
+  border: none;
+  color: rgb(159, 167, 141);
+  transition: 0.2s ease;
+}
+.notes-cont-head button:hover {
+  color:black;
+}
+.notes-container {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 25px;
+  padding: 10px 80px;
+}
+
+.note {
+  width: 250px;
+  height: 400px;
+  background: #fffa65;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+}
+.note-head{
+  background-color: #eae20d;
+  width: 100%;
+  padding: 2px 5px;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px;
+}
+.note-head h3{
+  font-size: 1.1rem;
+  font-weight: 400;
+  text-transform: capitalize;
+}
+.note-head .open_icon{
+  font-size: 1.2rem;
+}
+.note-content {
+height: calc(100% - 50px);
+width: 100%;
+padding: 5px 15px;
+font-size: 1.1rem;
+cursor: text;
+}
+
+.create-note-modal{
+  position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.show-note-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .show-note-modal .note-modal-contents{
+    height: 500px;
+    background: #fffa65;
+    width: 400px;
+    text-align: start;
+  }
+.show-note-modal .note-modal-contents .note-modal-head{
+  height: 50px;
+  background-color:#eae20d;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px;
+  text-transform: capitalize;
+  font-weight: 300;
+}
+.show-note-modal .note-modal-contents .note-modal-head .note-modal-actions button{
+  background: none;
+  outline: none;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  margin: 0px 5px;
+  color: #777303;
+}
+.show-note-modal .note-modal-contents .note-modal-head .note-modal-actions button:hover{
+  color: black;
+  font-weight: 600;
+}
+.show-note-modal .note-modal-contents .note-modal-content{
+  height: calc(100% - 50px);
+  width: 100%;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  overflow-y: scroll;
+}
+.modal-content {
+  height: 500px;
+  background: #fffa65;
+  padding: 20px;
+  width: 400px;
+  text-align: start;
+  position: relative;
+}
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+  font-size: 1.02rem;
+  background: #fffa65;
+  color: black;
+}
+.modal-content input::placeholder,
+.modal-content textarea::placeholder {
+  color: black;
+}
+
+.modal-content textarea {
+  height: 300px;
+  border: none;
+  outline: none;
+}
+
+.modal-content input {
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
+}
+
+.modal-content .buttons{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.modal-content .buttons button{
+  background: none;
+  font-size: 1.6rem;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  color: #777303;
+  cursor: pointer;
+}
+
+.modal-content .buttons button:hover{
+  color: black;
+}
+.modal-content .btn2{
+  background: rgb(21, 104, 21);
+  border: none;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  bottom: 10px;
+  right: 40%;
+  border-radius: 5px;
+}

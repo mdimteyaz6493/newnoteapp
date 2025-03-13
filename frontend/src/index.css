@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ font-family: "Poppins", sans-serif;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fffa65; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: #b900de; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b900de; 
+  cursor: pointer;
+}
+
+.main_cont{
+  /* background-color: #fffa65; */
+  height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+  
+
+  .note input, .note textarea {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  
+
+  
+ 
+  
+  .modal-content input,
+  .modal-content textarea {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+  }
+  
+  .modal-content button {
+    margin: 5px;
+    padding: 8px 12px;
+  }
+
+  
+
+  

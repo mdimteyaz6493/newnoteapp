@@ -1,0 +1,48 @@
+nav {
+  background-color: rgb(0, 0, 0);
+  height: 60px;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 40px;
+  color: white;
+}
+nav .logo {
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: flex-start;
+  width: 40%;
+}
+nav .logo .aa {
+  color: white;
+  text-decoration: none;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+nav .menu {
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  width: 60%;
+  gap: 40px;
+  align-items: center;
+}
+
+nav .menu .aaa {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+nav .menu .aaa:hover {
+  border-bottom: 2px solid white;
+}
+nav button{
+  color: white;
+  text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 400;
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
