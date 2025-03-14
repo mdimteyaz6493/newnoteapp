@@ -14,12 +14,12 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #fffa65; 
+  background: #ffffff; 
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background-color: #b900de; 
+  background-color: #12c5f1; 
 }
 
 /* Handle on hover */

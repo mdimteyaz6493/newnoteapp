@@ -25,7 +25,7 @@
   min-height: calc(100vh - 140px);
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: 25px;
   padding: 10px 80px;
@@ -64,10 +64,15 @@
   font-size: 1.2rem;
 }
 .note-content {
+  background: repeating-linear-gradient(
+    white,
+    white 23px,
+    #d3d3d3 25px
+  );
 height: calc(100% - 50px);
 width: 100%;
 padding: 5px 15px;
-font-size: 1.1rem;
+font-size: 1.05rem;
 cursor: text;
 }
 
@@ -96,10 +101,16 @@ cursor: text;
   }
   
   .show-note-modal .note-modal-contents{
-    height: 500px;
-    background: #fffa65;
+    background: repeating-linear-gradient(
+    white,
+    white 23px,
+    #d3d3d3 25px
+  );
+    min-height: 500px;
+    max-height: 700px;
     width: 400px;
     text-align: start;
+    overflow: hidden;
   }
 .show-note-modal .note-modal-contents .note-modal-head{
   height: 50px;
@@ -126,10 +137,11 @@ cursor: text;
 }
 .show-note-modal .note-modal-contents .note-modal-content{
   height: calc(100% - 50px);
+  max-height: 600px;
   width: 100%;
   padding: 10px 20px;
   font-size: 1.1rem;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .modal-content {
   height: 500px;

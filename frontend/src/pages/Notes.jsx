@@ -181,9 +181,17 @@ const Notes = () => {
           <button onClick={() => setViewModalOpen(false)}><RxCross2 /></button>
         </div>
       </div>
-      <div className="note-modal-content">
-        <p style={{ whiteSpace: "pre-wrap" }}>{currentNote.content}</p>
-      </div>
+      <div
+  className="note-modal-content"
+  style={{ whiteSpace: "pre-wrap" }}
+  dangerouslySetInnerHTML={{
+    __html: currentNote.content.replace(
+      /(https?:\/\/[^\s]+)/g,
+      '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+    ),
+  }}
+></div>
+
     </div>
   </div>
 )}

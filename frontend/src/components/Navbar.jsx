@@ -25,7 +25,6 @@ const Navbar = () => {
         <button onClick={handleLogout}><RiLogoutBoxRLine /></button>
       ) : (
         <>
-          <Link to="/" className="aaa">Login</Link>
           <Link to="/signup" className="aaa">Signup</Link>
         </>
       )}
