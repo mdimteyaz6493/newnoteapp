@@ -4,10 +4,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../styles/notes.css";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { MdOpenInNew } from "react-icons/md";
+import { MdOpenInNew, MdDelete, MdEditNote } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
-import { MdDelete } from "react-icons/md";
-import { MdEditNote } from "react-icons/md";
 import { FaRegCopy } from "react-icons/fa";
 
 const Notes = () => {
@@ -15,6 +13,9 @@ const Notes = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showColor, setShowColor] = useState(false);
+  const [selectedColor, setSelectedColor] = useState("paper"); // Default yellow
+  const [headcolor, setHeadcolor] = useState("#F4BB44");
   const [currentNote, setCurrentNote] = useState({
     id: null,
     title: "",
@@ -36,9 +37,38 @@ const Notes = () => {
       })
       .then((res) => setNotes(res.data))
       .catch((err) => console.error("Error fetching notes:", err));
-  }, [token, navigate]);
+  }, [token]);
 
-  // Open Add Note Modal
+  // Function to handle color change (excluding paper change)
+  const handleColorChange = (color) => {
+    if (color === "paper") {
+      setSelectedColor("paper");
+      setHeadcolor("#F4BB44")
+      return setShowColor(false);
+    }
+
+    const colors = {
+      yellow: "#F0E68C",
+      green: "#ACE1AF",
+      orange: "#FFE5B4",
+      pink: "#FFC0CB",
+      purple: "#E6E6FA",
+    };
+
+    const headColors = {
+      yellow: "#FEBE10",
+      green: "#1CAC78",
+      orange: "#F89880",
+      pink: "#F9629F",
+      purple: "#CF9FFF",
+      
+    };
+
+    setSelectedColor(colors[color] || "#FFFF00");
+    setHeadcolor(headColors[color] || "#FEBE10");
+    setShowColor(false);
+  };
+
   const openAddModal = () => {
     setIsEditing(false);
     setCurrentNote({ id: null, title: "", content: "" });
@@ -52,13 +82,11 @@ const Notes = () => {
     setViewModalOpen(false);
   };
 
-  // Open View Note Modal
   const openViewModal = (note) => {
     setCurrentNote({ id: note._id, title: note.title, content: note.content });
     setViewModalOpen(true);
   };
-
-  // Handle Save (for both Add & Edit)
+// Handle Save (for both Add & Edit)
   const handleSave = async () => {
     if (!currentNote.title.trim() || !currentNote.content.trim()) {
       alert("Title and content are required!");
@@ -103,20 +131,30 @@ const Notes = () => {
     }
   };
 
-  // Delete Note
   const deleteNote = async (id) => {
     try {
       await axios.delete(`https://newnoteapp-3.onrender.com/api/notes/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setNotes(notes.filter((note) => note._id !== id));
+      setNotes((prevNotes) => prevNotes.filter((note) => note._id !== id));
       setViewModalOpen(false);
     } catch (error) {
-      console.error(
-        "Error deleting note:",
-        error.response?.data || error.message
-      );
+      console.error("Error deleting note:", error.response?.data || error.message);
     }
+  };
+
+  // Convert URLs to clickable links
+  const convertToLinks = (text) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.split(urlRegex).map((part, index) => 
+      part.match(urlRegex) ? (
+        <a key={index} href={part} target="_blank" rel="noopener noreferrer" style={{ color: "blue" }}>
+          {part}
+        </a>
+      ) : (
+        part
+      )
+    );
   };
   const handleCopy = () => {
     navigator.clipboard.writeText(currentNote.content)
@@ -124,23 +162,50 @@ const Notes = () => {
       .catch(err => console.error("Failed to copy:", err));
   };
   
-
   return (
     <div className="main-notes-cont">
       <div className="notes-cont-head">
-        <button onClick={openAddModal}>
-          <IoAddCircleOutline />
-        </button>
+        <div className="menu">
+          <>
+          <div className="color">
+            <span className="menu_title" onClick={() => setShowColor((prev) => !prev)}>Color</span>
+            <ul className={showColor ? "color_option show_color" : "color_option"}>
+              {["yellow", "green", "orange", "pink", "purple", "paper"].map((color) => (
+                <li key={color} onClick={() => handleColorChange(color)}>
+                  <div
+                    style={{
+                      backgroundColor: color !== "paper" ? color : "white",
+                      backgroundImage: color === "paper"
+                        ? "repeating-linear-gradient(white, white 23px, #d3d3d3 25px)"
+                        : "none",
+                    }}
+                  ></div>
+                  <span>{color}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          </>
+        </div>
       </div>
 
       <div className="notes-container">
+      <button onClick={openAddModal} className="add_btn">
+          <IoAddCircleOutline />
+        </button>
         {notes.map((note) => (
-          <NoteItem key={note._id} note={note} openViewModal={openViewModal} />
+          <NoteItem 
+            key={note._id} 
+            note={note} 
+            openViewModal={openViewModal} 
+            selectedColor={selectedColor} 
+            headcolor={headcolor} 
+            convertToLinks={convertToLinks}
+          />
         ))}
       </div>
-
-      {/* Add/Edit Modal */}
-      {modalOpen && (
+  {/* Add/Edit Modal */}
+  {modalOpen && (
         <div className="create-note-modal">
           <div className="modal-content">
             <h3>{isEditing ? "Edit Note" : "Add Note"}</h3>
@@ -167,54 +232,45 @@ const Notes = () => {
           </div>
         </div>
       )}
-
-      {/* View Note Modal */}
+      
       {viewModalOpen && (
-  <div className="show-note-modal">
-    <div className="note-modal-contents">
-      <div className="note-modal-head">
-        <h3>{currentNote.title}</h3>
-        <div className="note-modal-actions">
-          <button onClick={openEditModal}><MdEditNote /></button>
-          <button onClick={handleCopy}><FaRegCopy /></button>
-          <button onClick={() => deleteNote(currentNote.id)}><MdDelete /></button>
-          <button onClick={() => setViewModalOpen(false)}><RxCross2 /></button>
+        <div className="show-note-modal">
+          <div className="note-modal-contents">
+            <div className="note-modal-head" >
+              <h3>{currentNote.title}</h3>
+              <div className="note-modal-actions">
+                <button onClick={openEditModal}><MdEditNote /></button>
+                <button onClick={handleCopy}><FaRegCopy /></button>
+                <button onClick={() => deleteNote(currentNote.id)}><MdDelete /></button>
+                <button onClick={() => setViewModalOpen(false)}><RxCross2 /></button>
+              </div>
+            </div>
+            <div className="note-modal-content" style={{ whiteSpace: "pre-wrap" }}>
+              {convertToLinks(currentNote.content)}
+            </div>
+          </div>
         </div>
-      </div>
-      <div
-  className="note-modal-content"
-  style={{ whiteSpace: "pre-wrap" }}
-  dangerouslySetInnerHTML={{
-    __html: currentNote.content.replace(
-      /(https?:\/\/[^\s]+)/g,
-      '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
-    ),
-  }}
-></div>
-
-    </div>
-  </div>
-)}
-
+      )}
     </div>
   );
 };
 
-const NoteItem = ({ note, openViewModal }) => {
+// NoteItem Component
+const NoteItem = ({ note, openViewModal, selectedColor, headcolor, convertToLinks }) => {
+  const backgroundStyle =
+    selectedColor === "paper"
+      ? { background: "repeating-linear-gradient(white, white 23px, #d3d3d3 25px)" }
+      : { backgroundColor: selectedColor };
+
   return (
-    <div className="note">
-      <div className="note-head">
+    <div className="note" style={backgroundStyle}>
+      <div className="note-head" style={{ backgroundColor: headcolor }}>
         <h3>{note.title}</h3>
-        <MdOpenInNew
-          className="open_icon"
-          onClick={() => openViewModal(note)}
-        />
+        <MdOpenInNew className="open_icon" onClick={() => openViewModal(note)} />
       </div>
       <div className="note-content">
         <p style={{ whiteSpace: "pre-wrap" }}>
-          {note.content.length < 250
-            ? note.content
-            : `${note.content.substring(0, 250)}...`}
+          {convertToLinks(note.content.length < 250 ? note.content : `${note.content.substring(0, 250)}...`)}
         </p>
       </div>
     </div>

@@ -1,24 +1,83 @@
 .main-notes-cont {
   background-color: rgb(233, 245, 208);
+  
 }
 .notes-cont-head {
-  /* background-color: orange; */
-  height: 80px;
+  height: 50px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 0px 30px;
+  background-color: rgb(188, 198, 166);
 }
-.notes-cont-head button {
+.notes-cont-head .menu{
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 20px;
+  
+}
+.notes-cont-head .menu .color{
+  display: flex;
+}
+.notes-cont-head .menu .color .menu_title{
+ font-size: 1.1rem;
+ font-weight: bold;
+ cursor: pointer;
+ position: relative;
+ user-select: none;
+}
+.notes-cont-head .menu .color .color_option{
+display: none;
+background-color: white;
+position: absolute;
+top: 120px;
+width: 100px;
+border-radius: 5px;
+}
+.notes-cont-head .menu .color .color_option.show_color {
+  display: block;
+}
+
+.notes-cont-head .menu .color_option li {
+list-style: none;
+border-bottom: 1px solid gray ;
+margin-top: 10px;
+text-align: center;
+text-transform: capitalize;
+cursor: pointer;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.notes-cont-head .menu .color_option span{
+width:70%;
+  }
+.notes-cont-head .menu .color .color_option li div{
+height: 20px;
+width: 20px;
+background-color: red;
+  }
+.add_btn{
+  position:absolute;
+  top: 80px;
+  right: 20px;
   cursor: pointer;
   font-size: 60px;
-  width: 100px;
+  width: 60px;
+  height: 60px;
   background: none;
   outline: none;
   border: none;
   color: rgb(159, 167, 141);
   transition: 0.2s ease;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.notes-cont-head button:hover {
+.add_btn:hover {
   color:black;
 }
 .notes-container {
@@ -28,7 +87,7 @@
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 25px;
-  padding: 10px 80px;
+  padding: 30px 80px;
 }
 
 .note {
@@ -64,11 +123,7 @@
   font-size: 1.2rem;
 }
 .note-content {
-  background: repeating-linear-gradient(
-    white,
-    white 23px,
-    #d3d3d3 25px
-  );
+
 height: calc(100% - 50px);
 width: 100%;
 padding: 5px 15px;
@@ -206,4 +261,27 @@ cursor: text;
   bottom: 10px;
   right: 40%;
   border-radius: 5px;
+}
+
+
+
+@media (max-width: 400px) {
+  .notes-container {
+    padding: 50px 50px;
+  }
+  .note {
+    width: 300px;
+    height: 450px;
+  }
+  .modal-content {
+    width: 350px;
+  }
+  .show-note-modal .note-modal-contents{
+    min-height: 100vh;
+    max-height: 100vh;
+    width: 100%;
+    text-align: start;
+    overflow: hidden;
+  }
+    
 }

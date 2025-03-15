@@ -166,5 +166,12 @@
     }
   }
   
+
+  @media (max-width: 400px) {
+
+    .form {
+      width: 350px;
+    }
+  }
   
       
