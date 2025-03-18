@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = "http://localhost:5000/api/images"; // Backend API URL
+const API_BASE = "https://newnoteapp-3.onrender.com/api/images"; // Backend API URL
 
 const ImageNote = () => {
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ const ImageNote = () => {
   // Download Image
   const downloadImage = (imgSrc) => {
     const link = document.createElement("a");
-    link.href = `http://localhost:5000${imgSrc}`;
+    link.href = `https://newnoteapp-3.onrender.com${imgSrc}`;
     link.download = "image-note.png";
     link.click();
   };
@@ -151,7 +151,7 @@ const ImageNote = () => {
       <div className="notes-grid">
         {notes.map((note) => (
           <div key={note._id} className="note-card">
-            <img src={`http://localhost:5000${note.imageUrl}`} alt="Note" className="note-img" />
+            <img src={`https://newnoteapp-3.onrender.com${note.imageUrl}`} alt="Note" className="note-img" />
             <div className="actions">
               <button onClick={() => downloadImage(note.imageUrl)}>📥 Download</button>
               <button onClick={() => deleteNote(note._id)}>🗑 Delete</button>
