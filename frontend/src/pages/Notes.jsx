@@ -233,23 +233,6 @@ else{
               </li>
             </ul>
           </div>
-          <div className="menu_cont">
-          <span className="menu_title" onClick={() => setshowtype((prev) => !prev)}>Note type</span>
-            <ul className={showtype ? "menu_option show_menu" : "menu_option"}>
-            <li
-                className={sortOrder === "textnote" ? "active" : ""}
-                onClick={() => handleNoteType("textnote")}
-              >
-                Text Note
-              </li>
-              <li
-                className={sortOrder === "imagenote" ? "active" : ""}
-                onClick={() => handleNoteType("imagenote")}
-              >
-                Image Note
-              </li>
-            </ul>
-          </div>
           </>
         </div>
       </div>

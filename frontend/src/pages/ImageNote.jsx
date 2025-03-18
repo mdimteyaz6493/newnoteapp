@@ -2,22 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = "https://newnoteapp-3.onrender.com/api/images"; // Backend API URL
+const API_BASE = "https://newnoteapp-3.onrender.com/api/images";
 
 const ImageNote = () => {
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
   const [notes, setNotes] = useState([]);
-  const [token, setToken] = useState(""); // Store JWT Token
-  const [showColor, setShowColor] = useState(false);
-  const [showSort, setShowSort] = useState(false);
-  const [showtype, setshowtype] = useState(false)
-  const [noteType, setnoteType] = useState("textnote")
-  const [sortOrder, setSortOrder] = useState("oldest"); // Sorting state
+  const [token, setToken] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedNote, setSelectedNote] = useState(null);
 
-  // Fetch Images from Backend
   useEffect(() => {
-    const userToken = localStorage.getItem("token"); // Fetch Token
+    const userToken = localStorage.getItem("token");
     setToken(userToken);
     if (userToken) {
       axios
@@ -26,23 +22,12 @@ const ImageNote = () => {
         .catch((err) => console.error("Error fetching images:", err));
     }
   }, []);
-  const handleNoteType = (notetype)=>{
-    if(notetype == "textnote"){
-      navigate("/notes")
-      setshowtype(false)
-    }
-    else{
-      navigate("/image")
-      setshowtype(false)
-    }
-    }
-  // Handle Image Upload
+
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     setImage(file);
   };
 
-  // Save Image as Note
   const saveImageNote = async () => {
     if (!image) return;
     const formData = new FormData();
@@ -50,7 +35,10 @@ const ImageNote = () => {
 
     try {
       const res = await axios.post(`${API_BASE}/upload`, formData, {
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
       setNotes([...notes, res.data]);
       setImage(null);
@@ -59,17 +47,17 @@ const ImageNote = () => {
     }
   };
 
-  // Delete Image
   const deleteNote = async (id) => {
     try {
-      await axios.delete(`${API_BASE}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(`${API_BASE}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setNotes(notes.filter((note) => note._id !== id));
     } catch (error) {
       console.error("Delete Error:", error);
     }
   };
 
-  // Download Image
   const downloadImage = (imgSrc) => {
     const link = document.createElement("a");
     link.href = `https://newnoteapp-3.onrender.com${imgSrc}`;
@@ -77,90 +65,121 @@ const ImageNote = () => {
     link.click();
   };
 
-  return (
-   <>
-     <div className="notes-cont-head">
-    <div className="menu">
-      <>
-      <div className="num_notes">Total Notes : {notes.length}</div>
-      <div className="menu_cont">
-        <span className="menu_title" onClick={() => setShowColor((prev) => !prev)}>Color</span>
-        <ul className={showColor ? "menu_option show_menu" : "menu_option"}>
-          {["yellow", "green", "orange", "pink", "purple", "paper"].map((color) => (
-            <li key={color} onClick={() => handleColorChange(color)}>
-              <div
-                style={{
-                  backgroundColor: color !== "paper" ? color : "white",
-                  backgroundImage: color === "paper"
-                    ? "repeating-linear-gradient(white, white 23px, #d3d3d3 25px)"
-                    : "none",
-                }}
-              ></div>
-              <span>{color}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="menu_cont">
-      <span className="menu_title" onClick={() => setShowSort((prev) => !prev)}>Sort By</span>
-        <ul className={showSort ? "menu_option show_menu" : "menu_option"}>
-        <li
-            className={sortOrder === "newest" ? "active" : ""}
-            onClick={() => handleSort("newest")}
-          >
-            Newest
-          </li>
-          <li
-            className={sortOrder === "oldest" ? "active" : ""}
-            onClick={() => handleSort("oldest")}
-          >
-            Oldest
-          </li>
-        </ul>
-      </div>
-      <div className="menu_cont">
-          <span className="menu_title" onClick={() => setshowtype((prev) => !prev)}>Note type</span>
-            <ul className={showtype ? "menu_option show_menu" : "menu_option"}>
-            <li
-                className={sortOrder === "textnote" ? "active" : ""}
-                onClick={() => handleNoteType("textnote")}
-              >
-                Text Note
-              </li>
-              <li
-                className={sortOrder === "imagenote" ? "active" : ""}
-                onClick={() => handleNoteType("imagenote")}
-              >
-                Image Note
-              </li>
-            </ul>
-          </div>
-      </>
-    </div>
-  </div>
-    <div className="image-note-container">
-      <h2>🖼 Image Notes</h2>
-      <input type="file" accept="image/*" onChange={handleImageUpload} />
-      
-      {image && (
-        <div className="preview">
-          <button onClick={saveImageNote}>Save Note</button>
-        </div>
-      )}
+  const openModal = (note) => {
+    setSelectedNote(note);
+    setShowModal(true);
+  };
 
-      <div className="notes-grid">
-        {notes.map((note) => (
-          <div key={note._id} className="note-card">
-            <img src={`https://newnoteapp-3.onrender.com${note.imageUrl}`} alt="Note" className="note-img" />
-            <div className="actions">
-              <button onClick={() => downloadImage(note.imageUrl)}>📥 Download</button>
-              <button onClick={() => deleteNote(note._id)}>🗑 Delete</button>
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedNote(null);
+  };
+
+  return (
+    <>
+      <div className="image-note-container">
+        <h2>Image Notes</h2>
+        {/* <input type="file" accept="image/*" onChange={handleImageUpload} /> */}
+        <div class="container">
+          <label className="custom-file-upload">
+            <input className="title" type="file" onChange={handleImageUpload} accept="image/*"/>
+            Choose a file
+          </label>
+        </div>
+        {image && (
+          <div className="preview">
+            <button onClick={saveImageNote}>Save Note</button>
+          </div>
+        )}
+        <div className="notes-grid">
+          {notes.map((note) => (
+            <div className="note_card_back">
+            <div key={note._id} className="note-card">
+              <img
+                src={
+                  note.imageUrl.startsWith("http")
+                    ? note.imageUrl
+                    : `https://newnoteapp-3.onrender.com${note.imageUrl}`
+                }
+                alt="Note"
+                className="note-img"
+                onClick={() => openModal(note)}
+              />
+            </div>
+            </div>
+          ))}
+        </div>
+        {/* Modal for Image */}
+        {showModal && selectedNote && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close-btn" onClick={closeModal}>
+                ×
+              </span>
+              <img
+                src={
+                  selectedNote.imageUrl.startsWith("http")
+                    ? selectedNote.imageUrl
+                    : `https://newnoteapp-3.onrender.com${selectedNote.imageUrl}`
+                }
+                alt="Note"
+                className="modal-img"
+              />
+              <h3>{selectedNote.title}</h3>
+              <p>{selectedNote.description}</p>
+              <div className="modal-actions">
+                <button onClick={() => downloadImage(selectedNote.imageUrl)}>
+                  📥 Download
+                </button>
+                <button onClick={() => deleteNote(selectedNote._id)}>
+                  🗑 Delete
+                </button>
+              </div>
             </div>
           </div>
-        ))}
+        )}
       </div>
-    </div>
-   </>
+
+      <style>
+        {`
+          .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+          }
+          .modal-img {
+            max-width: 90%;
+            max-height: 400px;
+          }
+          .modal-actions {
+            margin-top: 10px;
+          }
+          .modal-actions button {
+            margin: 5px;
+          }
+          .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+          }
+        `}
+      </style>
+    </>
   );
 };
 

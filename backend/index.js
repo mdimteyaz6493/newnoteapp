@@ -11,6 +11,8 @@ import imageRoute from "./routes/imageRoute.js";
 dotenv.config();
 const app = express();
 app.use("/uploads", express.static("uploads")); // Serve uploaded images
+app.use(express.urlencoded({ extended: true })); // ✅ Parse URL-Encoded Form Data
+
 
 
 const __dirname = path.resolve();
