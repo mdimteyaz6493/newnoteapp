@@ -14,6 +14,8 @@ const Notes = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showColor, setShowColor] = useState(false);
+  const [showSort, setShowSort] = useState(false);
+  const [sortOrder, setSortOrder] = useState("oldest"); // Sorting state
   const [selectedColor, setSelectedColor] = useState("paper"); // Default yellow
   const [headcolor, setHeadcolor] = useState("#F4BB44");
   const [currentNote, setCurrentNote] = useState({
@@ -22,9 +24,9 @@ const Notes = () => {
     content: "",
   });
 
+
   const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
-
   useEffect(() => {
     if (!token) {
       navigate("/");
@@ -35,10 +37,25 @@ const Notes = () => {
       .get("https://newnoteapp-3.onrender.com/api/notes", {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => setNotes(res.data))
+      .then((res) => {
+        const sortedNotes = sortNotes(res.data, sortOrder);
+        setNotes(sortedNotes);
+      })
       .catch((err) => console.error("Error fetching notes:", err));
-  }, [token]);
+  }, [token, sortOrder]);
 
+ // Sorting function
+ const sortNotes = (notesArray, order) => {
+  return [...notesArray].sort((a, b) => {
+    return order === "newest"
+      ? new Date(b.createdAt) - new Date(a.createdAt)
+      : new Date(a.createdAt) - new Date(b.createdAt);
+  });
+};
+const handleSort = (order) => {
+  setSortOrder(order);
+  setShowSort(false)
+};
   // Function to handle color change (excluding paper change)
   const handleColorChange = (color) => {
     if (color === "paper") {
@@ -167,9 +184,10 @@ const Notes = () => {
       <div className="notes-cont-head">
         <div className="menu">
           <>
-          <div className="color">
+          <div className="num_notes">Total Notes : {notes.length}</div>
+          <div className="menu_cont">
             <span className="menu_title" onClick={() => setShowColor((prev) => !prev)}>Color</span>
-            <ul className={showColor ? "color_option show_color" : "color_option"}>
+            <ul className={showColor ? "menu_option show_menu" : "menu_option"}>
               {["yellow", "green", "orange", "pink", "purple", "paper"].map((color) => (
                 <li key={color} onClick={() => handleColorChange(color)}>
                   <div
@@ -183,6 +201,23 @@ const Notes = () => {
                   <span>{color}</span>
                 </li>
               ))}
+            </ul>
+          </div>
+          <div className="menu_cont">
+          <span className="menu_title" onClick={() => setShowSort((prev) => !prev)}>Sort By</span>
+            <ul className={showSort ? "menu_option show_menu" : "menu_option"}>
+            <li
+                className={sortOrder === "newest" ? "active" : ""}
+                onClick={() => handleSort("newest")}
+              >
+                Newest
+              </li>
+              <li
+                className={sortOrder === "oldest" ? "active" : ""}
+                onClick={() => handleSort("oldest")}
+              >
+                Oldest
+              </li>
             </ul>
           </div>
           </>
