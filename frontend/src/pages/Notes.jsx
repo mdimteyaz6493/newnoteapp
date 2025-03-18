@@ -15,6 +15,8 @@ const Notes = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [showColor, setShowColor] = useState(false);
   const [showSort, setShowSort] = useState(false);
+  const [showtype, setshowtype] = useState(false)
+  const [noteType, setnoteType] = useState("textnote")
   const [sortOrder, setSortOrder] = useState("oldest"); // Sorting state
   const [selectedColor, setSelectedColor] = useState("paper"); // Default yellow
   const [headcolor, setHeadcolor] = useState("#F4BB44");
@@ -56,6 +58,17 @@ const handleSort = (order) => {
   setSortOrder(order);
   setShowSort(false)
 };
+const handleNoteType = (notetype)=>{
+  console.log(notetype)
+if(notetype == "textnote"){
+  navigate("/notes")
+  setshowtype(false)
+}
+else{
+  navigate("/image")
+  setshowtype(false)
+}
+}
   // Function to handle color change (excluding paper change)
   const handleColorChange = (color) => {
     if (color === "paper") {
@@ -217,6 +230,23 @@ const handleSort = (order) => {
                 onClick={() => handleSort("oldest")}
               >
                 Oldest
+              </li>
+            </ul>
+          </div>
+          <div className="menu_cont">
+          <span className="menu_title" onClick={() => setshowtype((prev) => !prev)}>Note type</span>
+            <ul className={showtype ? "menu_option show_menu" : "menu_option"}>
+            <li
+                className={sortOrder === "textnote" ? "active" : ""}
+                onClick={() => handleNoteType("textnote")}
+              >
+                Text Note
+              </li>
+              <li
+                className={sortOrder === "imagenote" ? "active" : ""}
+                onClick={() => handleNoteType("imagenote")}
+              >
+                Image Note
               </li>
             </ul>
           </div>

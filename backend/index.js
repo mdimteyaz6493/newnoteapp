@@ -5,9 +5,12 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/auth.js";
 import notesRoutes from "./routes/notes.js";
 import path from "path";
+import imageRoute from "./routes/imageRoute.js";
+
 
 dotenv.config();
 const app = express();
+app.use("/uploads", express.static("uploads")); // Serve uploaded images
 
 
 const __dirname = path.resolve();
@@ -24,6 +27,8 @@ mongoose
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
+app.use("/api/images", imageRoute);
+
 
 app.use(express.static(path.join(__dirname,"/frontend/dist")))
 app.get('*',(_,res)=>{

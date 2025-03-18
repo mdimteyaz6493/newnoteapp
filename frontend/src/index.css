@@ -59,6 +59,63 @@
     padding: 8px 12px;
   }
 
+
+  .image-note-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .preview {
+    margin-top: 10px;
+  }
+  
+  .preview-img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .note-card {
+    position: relative;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .note-img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  .actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  button {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
   
 
   
