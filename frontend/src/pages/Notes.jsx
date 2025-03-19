@@ -7,6 +7,10 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { MdOpenInNew, MdDelete, MdEditNote } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { FaRegCopy } from "react-icons/fa";
+import { IoMenu } from "react-icons/io5";
+import { IoMdClose } from "react-icons/io";
+
+
 
 const Notes = () => {
   const [notes, setNotes] = useState([]);
@@ -14,9 +18,8 @@ const Notes = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showColor, setShowColor] = useState(false);
+  const [showMenu, setshowMenu] = useState(false)
   const [showSort, setShowSort] = useState(false);
-  const [showtype, setshowtype] = useState(false)
-  const [noteType, setnoteType] = useState("textnote")
   const [sortOrder, setSortOrder] = useState("oldest"); // Sorting state
   const [selectedColor, setSelectedColor] = useState("paper"); // Default yellow
   const [headcolor, setHeadcolor] = useState("#F4BB44");
@@ -29,6 +32,19 @@ const Notes = () => {
 
   const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (modalOpen || viewModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  
+    return () => {
+      document.body.style.overflow = "auto"; // Cleanup on unmount
+    };
+  }, [modalOpen, viewModalOpen]);
+  
   useEffect(() => {
     if (!token) {
       navigate("/");
@@ -57,24 +73,17 @@ const Notes = () => {
 const handleSort = (order) => {
   setSortOrder(order);
   setShowSort(false)
+  setshowMenu(false)
 };
-const handleNoteType = (notetype)=>{
-  console.log(notetype)
-if(notetype == "textnote"){
-  navigate("/notes")
-  setshowtype(false)
-}
-else{
-  navigate("/image")
-  setshowtype(false)
-}
-}
+
   // Function to handle color change (excluding paper change)
   const handleColorChange = (color) => {
     if (color === "paper") {
       setSelectedColor("paper");
       setHeadcolor("#F4BB44")
-      return setShowColor(false);
+      return setShowColor(false), setshowMenu(false);
+     
+
     }
 
     const colors = {
@@ -97,6 +106,8 @@ else{
     setSelectedColor(colors[color] || "#FFFF00");
     setHeadcolor(headColors[color] || "#FEBE10");
     setShowColor(false);
+    setshowMenu(false)
+
   };
 
   const openAddModal = () => {
@@ -195,7 +206,10 @@ else{
   return (
     <div className="main-notes-cont">
       <div className="notes-cont-head">
-        <div className="menu">
+      {showMenu? <IoMdClose className="menu_icon" onClick={() => setshowMenu((prev) => !prev)}/>
+        :<IoMenu  className="menu_icon" onClick={() => setshowMenu((prev) => !prev)}/>}
+        <div className={showMenu ? "menu show":"menu"}>
+      
           <>
           <div className="num_notes">Total Notes : {notes.length}</div>
           <div className="menu_cont">

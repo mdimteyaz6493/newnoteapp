@@ -1,4 +1,5 @@
 .main-notes-cont {
+  min-height: 100vh;
   background-color: rgb(233, 245, 208);
 }
 .notes-cont-head {
@@ -15,6 +16,9 @@
   align-items: center;
   gap: 55px;
   padding: 0px 20px;
+}
+.notes-cont-head .menu_icon{
+  display: none;
 }
 .notes-cont-head .menu .num_notes{
   background-color: white;
@@ -166,6 +170,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 100000;
 }
 
 .show-note-modal .note-modal-contents {
@@ -292,10 +297,85 @@
     width: 350px;
   }
   .show-note-modal .note-modal-contents {
-    min-height: 100vh;
-    max-height: 100vh;
-    width: 100%;
+    width: 90%;
     text-align: start;
     overflow: hidden;
   }
+  .notes-cont-head .menu {
+    width: 70%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 20px;
+    background-color: #e9b59c;
+    height: 100vh;
+    z-index: 1;
+    position: fixed;
+    left: 0;
+    transform:translateX(-300px) ;
+    transition: 0.2s ease ;
+    box-shadow: 5px 5px 10px rgb(0, 0, 0,0.5);
+  }
+  .notes-cont-head .menu.show{
+    display: flex;
+    transform:translateX(0px) ;
+  }
+  .notes-cont-head .menu_icon{
+    display: block;
+    position: absolute;
+  top: 70px;
+  left: 20px;
+  cursor: pointer;
+  font-size: 30px;
+  cursor: pointer;
+  z-index: 2;
+  }
+  .notes-cont-head .menu .menu_cont {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .notes-cont-head .menu .menu_cont .menu_title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  .notes-cont-head .menu .menu_cont .menu_option{
+    position: static;
+    width: 100%;
+    border-radius: 0px;
+    box-shadow: none;
+    z-index: 1;
+    display: block;
+    margin-top: 20px;
+    background-color: #fdd3c0;
+  }
+
+  .notes-cont-head .menu .menu_option li {
+    height: 40px;
+    list-style: none;
+    border-bottom: 1px solid gray;
+    margin-top: 10px;
+    text-align: center;
+    text-transform: capitalize;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  .notes-cont-head .menu .menu_option span {
+    width: 70%;
+    font-size: 1.1rem;
+  }
+  .notes-cont-head .menu .menu_cont .menu_option li div {
+    height: 35px;
+    width: 35px;
+    background-color: red;
+  }
+  
 }
