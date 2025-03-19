@@ -32,18 +32,19 @@ const Notes = () => {
 
   const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    if (modalOpen || viewModalOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  
-    return () => {
-      document.body.style.overflow = "auto"; // Cleanup on unmount
-    };
-  }, [modalOpen, viewModalOpen]);
+
+useEffect(() => {
+  if (modalOpen || viewModalOpen || showMenu) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "auto";
+  }
+
+  return () => {
+    document.body.style.overflow = "auto"; // Cleanup on unmount
+  };
+}, [modalOpen, viewModalOpen, showMenu]);
+
   
   useEffect(() => {
     if (!token) {

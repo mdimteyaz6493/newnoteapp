@@ -302,7 +302,7 @@
     overflow: hidden;
   }
   .notes-cont-head .menu {
-    width: 70%;
+    width: 60%;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
@@ -316,6 +316,9 @@
     transform:translateX(-300px) ;
     transition: 0.2s ease ;
     box-shadow: 5px 5px 10px rgb(0, 0, 0,0.5);
+  }
+  .num_notes{
+    margin-left: 50px;
   }
   .notes-cont-head .menu.show{
     display: flex;
@@ -356,7 +359,7 @@
   }
 
   .notes-cont-head .menu .menu_option li {
-    height: 40px;
+    height: 30px;
     list-style: none;
     border-bottom: 1px solid gray;
     margin-top: 10px;
@@ -373,8 +376,8 @@
     font-size: 1.1rem;
   }
   .notes-cont-head .menu .menu_cont .menu_option li div {
-    height: 35px;
-    width: 35px;
+    height: 25px;
+    width: 25px;
     background-color: red;
   }
   
