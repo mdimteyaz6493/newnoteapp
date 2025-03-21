@@ -10,6 +10,8 @@ import { FaRegCopy } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { IoMdHeartEmpty } from "react-icons/io";
+import { IoMdHeart } from "react-icons/io";
+
 
 
 
