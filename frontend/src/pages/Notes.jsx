@@ -9,6 +9,8 @@ import { RxCross2 } from "react-icons/rx";
 import { FaRegCopy } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
+import { IoMdHeartEmpty } from "react-icons/io";
+
 
 
 
@@ -20,6 +22,7 @@ const Notes = () => {
   const [showColor, setShowColor] = useState(false);
   const [showMenu, setshowMenu] = useState(false)
   const [showSort, setShowSort] = useState(false);
+  const [showFavorites, setShowFavorites] = useState(false);
   const [sortOrder, setSortOrder] = useState("oldest"); // Sorting state
   const [selectedColor, setSelectedColor] = useState("paper"); // Default yellow
   const [headcolor, setHeadcolor] = useState("#F4BB44");
@@ -203,7 +206,30 @@ const handleSort = (order) => {
       .then(() => alert("Note copied to clipboard!"))
       .catch(err => console.error("Failed to copy:", err));
   };
-  
+  // ✅ Toggle Favorite Note
+  const toggleFavorite = async (noteId) => {
+    try {
+      const res = await axios.put(
+        `https://newnoteapp-3.onrender.com/api/notes/favorite/${noteId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (res.data.success) {
+        setNotes((prevNotes) =>
+          prevNotes.map((note) =>
+            note._id === noteId ? { ...note, isFavorite: res.data.isFavorite } : note
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error updating favorite:", error);
+    }
+  };
+
+  // ✅ Filter Notes based on Favorite Toggle
+  const filteredNotes = showFavorites ? notes.filter((note) => note.isFavorite) : notes;
+
   return (
     <div className="main-notes-cont">
       <div className="notes-cont-head">
@@ -248,6 +274,11 @@ const handleSort = (order) => {
               </li>
             </ul>
           </div>
+          <div className="menu_cont">
+            <button onClick={() => setShowFavorites((prev) => !prev)} className="menu_btn">
+              {showFavorites ? "Show All Notes" : "Show Favorites ❤️"}
+            </button>
+          </div>
           </>
         </div>
       </div>
@@ -256,10 +287,21 @@ const handleSort = (order) => {
       <button onClick={openAddModal} className="add_btn">
           <IoAddCircleOutline />
         </button>
-        {notes.map((note) => (
+        {/* {notes.map((note) => (
           <NoteItem 
             key={note._id} 
             note={note} 
+            openViewModal={openViewModal} 
+            selectedColor={selectedColor} 
+            headcolor={headcolor} 
+            convertToLinks={convertToLinks}
+          />
+        ))} */}
+        {filteredNotes.map((note) => (
+          <NoteItem
+            key={note._id}
+            note={note}
+            toggleFavorite={toggleFavorite}
             openViewModal={openViewModal} 
             selectedColor={selectedColor} 
             headcolor={headcolor} 
@@ -319,7 +361,7 @@ const handleSort = (order) => {
 };
 
 // NoteItem Component
-const NoteItem = ({ note, openViewModal, selectedColor, headcolor, convertToLinks }) => {
+const NoteItem = ({ note, openViewModal, selectedColor, headcolor, convertToLinks ,toggleFavorite}) => {
   const backgroundStyle =
     selectedColor === "paper"
       ? { background: "repeating-linear-gradient(white, white 23px, #d3d3d3 25px)" }
@@ -329,6 +371,9 @@ const NoteItem = ({ note, openViewModal, selectedColor, headcolor, convertToLink
     <div className="note" style={backgroundStyle}>
       <div className="note-head" style={{ backgroundColor: headcolor }}>
         <h3>{note.title}</h3>
+        <button onClick={() => toggleFavorite(note._id)} className="fav-btn">
+            {note.isFavorite ? <IoMdHeart color="red" /> : <IoMdHeartEmpty />}
+          </button>
         <MdOpenInNew className="open_icon" onClick={() => openViewModal(note)} />
       </div>
       <div className="note-content">
