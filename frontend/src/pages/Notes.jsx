@@ -11,10 +11,7 @@ import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoMdHeart } from "react-icons/io";
-
-
-
-
+import { ToastContainer, toast, Bounce, Slide } from "react-toastify";
 
 const Notes = () => {
   const [notes, setNotes] = useState([]);
@@ -22,7 +19,7 @@ const Notes = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showColor, setShowColor] = useState(false);
-  const [showMenu, setshowMenu] = useState(false)
+  const [showMenu, setshowMenu] = useState(false);
   const [showSort, setShowSort] = useState(false);
   const [showFavorites, setShowFavorites] = useState(false);
   const [sortOrder, setSortOrder] = useState("oldest"); // Sorting state
@@ -34,23 +31,21 @@ const Notes = () => {
     content: "",
   });
 
-
   const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
 
-useEffect(() => {
-  if (modalOpen || viewModalOpen || showMenu) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "auto";
-  }
+  useEffect(() => {
+    if (modalOpen || viewModalOpen || showMenu) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
 
-  return () => {
-    document.body.style.overflow = "auto"; // Cleanup on unmount
-  };
-}, [modalOpen, viewModalOpen, showMenu]);
+    return () => {
+      document.body.style.overflow = "auto"; // Cleanup on unmount
+    };
+  }, [modalOpen, viewModalOpen, showMenu]);
 
-  
   useEffect(() => {
     if (!token) {
       navigate("/");
@@ -68,28 +63,26 @@ useEffect(() => {
       .catch((err) => console.error("Error fetching notes:", err));
   }, [token, sortOrder]);
 
- // Sorting function
- const sortNotes = (notesArray, order) => {
-  return [...notesArray].sort((a, b) => {
-    return order === "newest"
-      ? new Date(b.createdAt) - new Date(a.createdAt)
-      : new Date(a.createdAt) - new Date(b.createdAt);
-  });
-};
-const handleSort = (order) => {
-  setSortOrder(order);
-  setShowSort(false)
-  setshowMenu(false)
-};
+  // Sorting function
+  const sortNotes = (notesArray, order) => {
+    return [...notesArray].sort((a, b) => {
+      return order === "newest"
+        ? new Date(b.createdAt) - new Date(a.createdAt)
+        : new Date(a.createdAt) - new Date(b.createdAt);
+    });
+  };
+  const handleSort = (order) => {
+    setSortOrder(order);
+    setShowSort(false);
+    setshowMenu(false);
+  };
 
   // Function to handle color change (excluding paper change)
   const handleColorChange = (color) => {
     if (color === "paper") {
       setSelectedColor("paper");
-      setHeadcolor("#F4BB44")
+      setHeadcolor("#F4BB44");
       return setShowColor(false), setshowMenu(false);
-     
-
     }
 
     const colors = {
@@ -106,14 +99,12 @@ const handleSort = (order) => {
       orange: "#F89880",
       pink: "#F9629F",
       purple: "#CF9FFF",
-      
     };
 
     setSelectedColor(colors[color] || "#FFFF00");
     setHeadcolor(headColors[color] || "#FEBE10");
     setShowColor(false);
-    setshowMenu(false)
-
+    setshowMenu(false);
   };
 
   const openAddModal = () => {
@@ -133,10 +124,10 @@ const handleSort = (order) => {
     setCurrentNote({ id: note._id, title: note.title, content: note.content });
     setViewModalOpen(true);
   };
-// Handle Save (for both Add & Edit)
+  // Handle Save (for both Add & Edit)
   const handleSave = async () => {
     if (!currentNote.title.trim() || !currentNote.content.trim()) {
-      alert("Title and content are required!");
+      toast.error("Title and content are required!"); 
       return;
     }
 
@@ -159,6 +150,7 @@ const handleSort = (order) => {
               : note
           )
         );
+        toast.success("Note updated successfully!"); // ✅ Success toast for update
       } else {
         // Add Note
         const res = await axios.post(
@@ -167,6 +159,7 @@ const handleSort = (order) => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setNotes([...notes, res.data]);
+        toast.success("Note added successfully!"); // ✅ Success toast for add
       }
       setModalOpen(false);
     } catch (error) {
@@ -175,27 +168,51 @@ const handleSort = (order) => {
         error.response?.data || error.message
       );
       alert(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message || "Something went wrong!"); // ❌ Error toast
     }
   };
 
-  const deleteNote = async (id) => {
+   // 🔹 Function to Show Confirm Toast
+   const handleDeleteClick = (id) => {
+    toast(
+      ({ closeToast }) => (
+        <div className="conf_div">
+          <p>Are you sure you want to delete this note?</p>
+          <button onClick={() => handleDelete(id, closeToast)}> Confirm </button>
+          <button onClick={closeToast}> Cancel</button>
+        </div>
+      ),
+      { position: "top-center", autoClose: false, closeOnClick: false, draggable: false }
+    );
+  };
+
+  // 🔹 Function to Delete Note
+  const handleDelete = async (id, closeToast) => {
     try {
       await axios.delete(`https://newnoteapp-3.onrender.com/api/notes/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setNotes((prevNotes) => prevNotes.filter((note) => note._id !== id));
-      setViewModalOpen(false);
+      setNotes(notes.filter((note) => note._id !== id));
+      closeToast(); // ✅ Close the confirm toast after deletion
+      setViewModalOpen(false)
     } catch (error) {
-      console.error("Error deleting note:", error.response?.data || error.message);
+      console.error("Error deleting note:", error);
+      toast.error("Failed to delete note!");
     }
   };
 
   // Convert URLs to clickable links
   const convertToLinks = (text) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    return text.split(urlRegex).map((part, index) => 
+    return text.split(urlRegex).map((part, index) =>
       part.match(urlRegex) ? (
-        <a key={index} href={part} target="_blank" rel="noopener noreferrer" style={{ color: "blue" }}>
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "blue" }}
+        >
           {part}
         </a>
       ) : (
@@ -204,11 +221,11 @@ const handleSort = (order) => {
     );
   };
   const handleCopy = () => {
-    navigator.clipboard.writeText(currentNote.content)
-      .then(() => alert("Note copied to clipboard!"))
-      .catch(err => console.error("Failed to copy:", err));
+    navigator.clipboard
+      .writeText(currentNote.content)
+      .then(() =>  toast.success("Note Copied!"))
+      .catch((err) => console.error("Failed to copy:", err));
   };
-  // ✅ Toggle Favorite Note
   const toggleFavorite = async (noteId) => {
     try {
       const res = await axios.put(
@@ -216,77 +233,115 @@ const handleSort = (order) => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
+  
       if (res.data.success) {
         setNotes((prevNotes) =>
           prevNotes.map((note) =>
-            note._id === noteId ? { ...note, isFavorite: res.data.isFavorite } : note
+            note._id === noteId
+              ? { ...note, isFavorite: res.data.isFavorite }
+              : note
           )
         );
+        toast.success(res.data.isFavorite ? "Added to favourite!" : "Removed from favourite!");
       }
     } catch (error) {
       console.error("Error updating favorite:", error);
     }
   };
-
+  
   // ✅ Filter Notes based on Favorite Toggle
-  const filteredNotes = showFavorites ? notes.filter((note) => note.isFavorite) : notes;
+  const filteredNotes = showFavorites
+    ? notes.filter((note) => note.isFavorite)
+    : notes;
 
   return (
     <div className="main-notes-cont">
       <div className="notes-cont-head">
-      {showMenu? <IoMdClose className="menu_icon" onClick={() => setshowMenu((prev) => !prev)}/>
-        :<IoMenu  className="menu_icon" onClick={() => setshowMenu((prev) => !prev)}/>}
-        <div className={showMenu ? "menu show":"menu"}>
-      
+        {showMenu ? (
+          <IoMdClose
+            className="menu_icon"
+            onClick={() => setshowMenu((prev) => !prev)}
+          />
+        ) : (
+          <IoMenu
+            className="menu_icon"
+            onClick={() => setshowMenu((prev) => !prev)}
+          />
+        )}
+        <div className={showMenu ? "menu show" : "menu"}>
           <>
-          <div className="num_notes">Total Notes : {notes.length}</div>
-          <div className="menu_cont">
-            <span className="menu_title" onClick={() => setShowColor((prev) => !prev)}>Color</span>
-            <ul className={showColor ? "menu_option show_menu" : "menu_option"}>
-              {["yellow", "green", "orange", "pink", "purple", "paper"].map((color) => (
-                <li key={color} onClick={() => handleColorChange(color)}>
-                  <div
-                    style={{
-                      backgroundColor: color !== "paper" ? color : "white",
-                      backgroundImage: color === "paper"
-                        ? "repeating-linear-gradient(white, white 23px, #d3d3d3 25px)"
-                        : "none",
-                    }}
-                  ></div>
-                  <span>{color}</span>
+            <div className="num_notes">Total Notes : {notes.length}</div>
+            <div className="menu_cont">
+              <span
+                className="menu_title"
+                onClick={() => setShowColor((prev) => !prev)}
+              >
+                Color
+              </span>
+              <ul
+                className={showColor ? "menu_option show_menu" : "menu_option"}
+              >
+                {["yellow", "green", "orange", "pink", "purple", "paper"].map(
+                  (color) => (
+                    <li key={color} onClick={() => handleColorChange(color)}>
+                      <div
+                        style={{
+                          backgroundColor: color !== "paper" ? color : "white",
+                          backgroundImage:
+                            color === "paper"
+                              ? "repeating-linear-gradient(white, white 23px, #d3d3d3 25px)"
+                              : "none",
+                        }}
+                      ></div>
+                      <span>{color}</span>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
+            <div className="menu_cont">
+              <span
+                className="menu_title"
+                onClick={() => setShowSort((prev) => !prev)}
+              >
+                Sort By
+              </span>
+              <ul
+                className={showSort ? "menu_option show_menu" : "menu_option"}
+              >
+                <li
+                  className={sortOrder === "newest" ? "active" : ""}
+                  onClick={() => handleSort("newest")}
+                >
+                  Newest
                 </li>
-              ))}
-            </ul>
-          </div>
-          <div className="menu_cont">
-          <span className="menu_title" onClick={() => setShowSort((prev) => !prev)}>Sort By</span>
-            <ul className={showSort ? "menu_option show_menu" : "menu_option"}>
-            <li
-                className={sortOrder === "newest" ? "active" : ""}
-                onClick={() => handleSort("newest")}
+                <li
+                  className={sortOrder === "oldest" ? "active" : ""}
+                  onClick={() => handleSort("oldest")}
+                >
+                  Oldest
+                </li>
+              </ul>
+            </div>
+            <div className="menu_cont">
+              <button
+                onClick={() => setShowFavorites((prev) => !prev)}
+                className="menu_btn"
               >
-                Newest
-              </li>
-              <li
-                className={sortOrder === "oldest" ? "active" : ""}
-                onClick={() => handleSort("oldest")}
-              >
-                Oldest
-              </li>
-            </ul>
-          </div>
-          <div className="menu_cont">
-            <button onClick={() => setShowFavorites((prev) => !prev)} className="menu_btn">
-              {showFavorites ? "Show All Notes" : "Show Favorites ❤️"}
-            </button>
-          </div>
+                {showFavorites ? "All Notes" : "Favorites"}
+              </button>
+              {!showFavorites && (
+                <span className="no_fav">
+                  {notes.filter((note) => note.isFavorite).length}
+                </span>
+              )}
+            </div>
           </>
         </div>
       </div>
 
       <div className="notes-container">
-      <button onClick={openAddModal} className="add_btn">
+        <button onClick={openAddModal} className="add_btn">
           <IoAddCircleOutline />
         </button>
         {/* {notes.map((note) => (
@@ -304,15 +359,15 @@ const handleSort = (order) => {
             key={note._id}
             note={note}
             toggleFavorite={toggleFavorite}
-            openViewModal={openViewModal} 
-            selectedColor={selectedColor} 
-            headcolor={headcolor} 
+            openViewModal={openViewModal}
+            selectedColor={selectedColor}
+            headcolor={headcolor}
             convertToLinks={convertToLinks}
           />
         ))}
       </div>
-  {/* Add/Edit Modal */}
-  {modalOpen && (
+      {/* Add/Edit Modal */}
+      {modalOpen && (
         <div className="create-note-modal">
           <div className="modal-content">
             <h3>{isEditing ? "Edit Note" : "Add Note"}</h3>
@@ -330,43 +385,81 @@ const handleSort = (order) => {
                 setCurrentNote({ ...currentNote, content: e.target.value })
               }
             />
-           <div className="buttons">
-            <button onClick={() => setModalOpen(false)}><RxCross2 /></button>
-           </div>
-           <button onClick={handleSave} className="btn2">
+            <div className="buttons">
+              <button onClick={() => setModalOpen(false)}>
+                <RxCross2 />
+              </button>
+            </div>
+            <button onClick={handleSave} className="btn2">
               {isEditing ? "Update" : "Save"}
             </button>
           </div>
         </div>
       )}
-      
+
       {viewModalOpen && (
         <div className="show-note-modal">
           <div className="note-modal-contents">
-            <div className="note-modal-head" >
+            <div className="note-modal-head">
               <h3>{currentNote.title}</h3>
               <div className="note-modal-actions">
-                <button onClick={openEditModal}><MdEditNote /></button>
-                <button onClick={handleCopy}><FaRegCopy /></button>
-                <button onClick={() => deleteNote(currentNote.id)}><MdDelete /></button>
-                <button onClick={() => setViewModalOpen(false)}><RxCross2 /></button>
+                <button onClick={openEditModal}>
+                  <MdEditNote />
+                </button>
+                <button onClick={handleCopy}>
+                  <FaRegCopy />
+                </button>
+                <button onClick={() => handleDeleteClick(currentNote.id)}>
+                  <MdDelete />
+                </button>
+                <button onClick={() => setViewModalOpen(false)}>
+                  <RxCross2 />
+                </button>
               </div>
             </div>
-            <div className="note-modal-content" style={{ whiteSpace: "pre-wrap" }}>
+            <div
+              className="note-modal-content"
+              style={{ whiteSpace: "pre-wrap" }}
+            >
               {convertToLinks(currentNote.content)}
             </div>
           </div>
         </div>
       )}
+      {/* Toast Notification Container */}
+      <ToastContainer
+        position="top-center"
+        autoClose={1200}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Slide}
+        className="toast"
+      />
     </div>
   );
 };
 
 // NoteItem Component
-const NoteItem = ({ note, openViewModal, selectedColor, headcolor, convertToLinks ,toggleFavorite}) => {
+const NoteItem = ({
+  note,
+  openViewModal,
+  selectedColor,
+  headcolor,
+  convertToLinks,
+  toggleFavorite,
+}) => {
   const backgroundStyle =
     selectedColor === "paper"
-      ? { background: "repeating-linear-gradient(white, white 23px, #d3d3d3 25px)" }
+      ? {
+          background:
+            "repeating-linear-gradient(white, white 23px, #d3d3d3 25px)",
+        }
       : { backgroundColor: selectedColor };
 
   return (
@@ -374,13 +467,20 @@ const NoteItem = ({ note, openViewModal, selectedColor, headcolor, convertToLink
       <div className="note-head" style={{ backgroundColor: headcolor }}>
         <h3>{note.title}</h3>
         <button onClick={() => toggleFavorite(note._id)} className="fav-btn">
-            {note.isFavorite ? <IoMdHeart color="red" /> : <IoMdHeartEmpty />}
-          </button>
-        <MdOpenInNew className="open_icon" onClick={() => openViewModal(note)} />
+          {note.isFavorite ? <IoMdHeart color="red" /> : <IoMdHeartEmpty />}
+        </button>
+        <MdOpenInNew
+          className="open_icon"
+          onClick={() => openViewModal(note)}
+        />
       </div>
       <div className="note-content">
         <p style={{ whiteSpace: "pre-wrap" }}>
-          {convertToLinks(note.content.length < 250 ? note.content : `${note.content.substring(0, 250)}...`)}
+          {convertToLinks(
+            note.content.length < 250
+              ? note.content
+              : `${note.content.substring(0, 250)}...`
+          )}
         </p>
       </div>
     </div>

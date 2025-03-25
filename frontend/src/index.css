@@ -60,7 +60,28 @@
     padding: 8px 12px;
   }
 
-
+.conf_div{
+padding: 10px;
+}
+.conf_div p{
+  
+}
+.conf_div button{
+  height: 30px;
+  width: 80px;
+  border: none;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+.conf_div button:nth-child(2){
+  background-color: red;
+}
+.conf_div button:nth-child(3){
+  background-color: gray;
+}
 
   
   

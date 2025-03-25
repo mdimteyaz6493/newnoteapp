@@ -4,6 +4,8 @@ import { setUser } from "../slices/authSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
+import { ToastContainer, toast, Bounce, Slide } from "react-toastify";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,15 +16,25 @@ const Login = () => {
 
   const handleLogin = async () => {
     setLoading(true);
-    try {
-      const { data } = await axios.post("https://newnoteapp-3.onrender.com/api/auth/login", { email, password });
-      dispatch(setUser({ user: data.user, token: data.token }));
-      alert("Login successfully");
-      navigate("/notes");
-    } catch (error) {
-      alert(error.response.data.message);
-    } finally {
-      setLoading(false);
+    if(email=="" || password==""){
+      toast.error("Email and password required")
+      setLoading(false)
+    }
+    else{
+      try {
+        const { data } = await axios.post("https://newnoteapp-3.onrender.com/api/auth/login", { email, password });
+        dispatch(setUser({ user: data.user, token: data.token }));
+        // // alert("Login successfully");
+        toast.success("Login Successfully")
+        setTimeout(() => {
+          navigate("/notes"); 
+        }, 2000);
+      } catch (error) {
+        // alert(error.response.data.message);
+        toast.error(error.response.data.message)
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -50,6 +62,21 @@ const Login = () => {
         </button>
         <p className="p">Don't have an account? <span className="span" onClick={() => navigate("/signup")}>Signup</span></p>
       </form>
+      {/* Toast Notification Container */}
+            <ToastContainer
+              position="top-center"
+              autoClose={1200}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick={false}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+              transition={Slide}
+              className="toast"
+            />
     </div>
   );
 };
