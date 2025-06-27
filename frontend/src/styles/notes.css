@@ -1,106 +1,63 @@
 .main-notes-cont {
   min-height: 100vh;
-  background-color: rgb(233, 245, 208);
+  background-color: rgb(255, 255, 255);
 }
+.main-notes-cont.dark{
+  background-color: rgb(0, 0, 0);
+
+}
+
 .toast{
   z-index: 500000;
 }
 .notes-cont-head {
-  height: 50px;
+  height: 40px;
   display: flex;
   justify-content: space-between;
-  padding: 0px 30px;
-  background-color: rgb(188, 198, 166);
+  padding: 0px 10px;
+  background-color: rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(208, 208, 208);
 }
+
 .notes-cont-head .menu {
   width: 80%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 55px;
+  gap: 20px;
   padding: 0px 20px;
 }
 .notes-cont-head .menu_icon{
   display: none;
 }
 .notes-cont-head .menu .num_notes{
-  background-color: white;
+  background-color: rgb(239, 237, 237);
   height: 30px;
   width: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-.notes-cont-head .menu .menu_cont {
-  display: flex;
-  position: relative;
-}
-.notes-cont-head .menu .menu_cont .menu_title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  position: relative;
-  user-select: none;
-}
-.notes-cont-head .menu .menu_cont .menu_option{
-  display: none;
-  background-color: white;
-  position: absolute;
-  top: 40px;
-  left: -10px;
-  width: 100px;
-  border-radius: 5px;
-  box-shadow: 2px 3px 5px rgb(0, 0, 0,0.5);
-}
-.notes-cont-head .menu .menu_cont .menu_option.show_menu {
-  display: block;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-right: 20px;
 }
 
-.notes-cont-head .menu .menu_option li {
-  list-style: none;
-  border-bottom: 1px solid gray;
-  margin-top: 10px;
-  text-align: center;
-  text-transform: capitalize;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.notes-cont-head .menu .menu_option span {
-  width: 70%;
-}
-.notes-cont-head .menu .menu_cont .menu_option li div {
-  height: 20px;
-  width: 20px;
-  background-color: red;
-}
 .menu_btn{
   background:none;
   outline:none;
   border: none;
   cursor: pointer;
-  font-size: 1.1rem;
-  font-weight: bold;
+  font-size: 0.95rem;
+  font-weight: 500;
   text-align: start;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
-.no_fav{
-position: absolute;
-right: -16px;
-top: -5px;
-height: 20px;
-width: 20px;
-border-radius: 50%;
-display: flex;
-justify-content: center;
-align-items: center;
-background-color: rgb(216, 5, 47);
-font-size: 0.9rem;
-color: white;
+.menu_btn:hover{
+    background-color: rgb(239, 237, 237);
 }
+
 
 .add_btn {
   position: absolute;
@@ -126,19 +83,17 @@ color: white;
 }
 .notes-container {
   min-height: calc(100vh - 140px);
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 25px;
-  padding: 30px 80px;
+  width: 100%;
+    margin: 20px auto;
+    columns: 6;
+    column-gap: 5px;
+    padding: 20px;
 }
 
 .note {
-  width: 250px;
-  height: 400px;
-  background: #fffa65;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  width: auto;
+  height: auto;
+  background: #ffffff;
   cursor: pointer;
   overflow: hidden;
   transition: all 0.3s ease-in-out;
@@ -146,9 +101,15 @@ color: white;
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
+  border: 1px solid rgb(190, 190, 190);
+  border-radius: 10px;
+  margin: 10px 5px;
 }
+.note.dark {
+  background-color: #000000;
+} 
 .note-head {
-  background-color: #eae20d;
+  background-color: #ffffff;
   width: 100%;
   padding: 2px 5px;
   height: 50px;
@@ -159,20 +120,20 @@ color: white;
   padding: 0px 10px;
 }
 .note-head h3 {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 400;
   text-transform: capitalize;
   width: 70%;
 }
 .note-head .open_icon {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 .fav-btn{
   background:none;
   outline: none;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -185,8 +146,9 @@ color: white;
   height: calc(100% - 50px);
   width: 100%;
   padding: 5px 15px;
-  font-size: 1.05rem;
+  font-size: 0.8rem;
   cursor: text;
+  background-color: white;
 }
 
 .create-note-modal {
@@ -215,22 +177,27 @@ color: white;
 }
 
 .show-note-modal .note-modal-contents {
-  background: repeating-linear-gradient(white, white 23px, #d3d3d3 25px);
-  min-height: 500px;
-  max-height: 700px;
-  width: 400px;
+ background-color: white;
+  min-height: 600px;
+  max-height: 800px;
+  min-width: 350px;
+  max-width: 600px;
   text-align: start;
   overflow: hidden;
+  border: 1px solid rgb(190, 190, 190);
+  border-radius: 10px;
+  
 }
 .show-note-modal .note-modal-contents .note-modal-head {
   height: 50px;
-  background-color: #eae20d;
+  background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0px 10px;
   text-transform: capitalize;
-  font-weight: 300;
+  font-weight: 400;
+  font-size: 1rem;
 }
 .show-note-modal
   .note-modal-contents
@@ -240,10 +207,11 @@ color: white;
   background: none;
   outline: none;
   border: none;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   cursor: pointer;
   margin: 0px 5px;
-  color: #777303;
+  color: #050505;
+  transition: 0.2s ease-in-out;
 }
 .show-note-modal
   .note-modal-contents
@@ -258,24 +226,27 @@ color: white;
   max-height: 600px;
   width: 100%;
   padding: 10px 20px;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   overflow-y: auto;
 }
 .modal-content {
-  height: 500px;
-  background: #fffa65;
+ height: auto;
+ max-height: 700px;
+  background: #ffffff;
   padding: 20px;
   width: 400px;
   text-align: start;
   position: relative;
+  border-radius: 10px;
+  border: 1px solid rgb(205, 205, 205);
 }
 .modal-content input,
 .modal-content textarea {
   width: 100%;
   margin: 10px 0;
   padding: 8px;
-  font-size: 1.02rem;
-  background: #fffa65;
+  font-size: 1rem;
+  background: #ffffff;
   color: black;
 }
 .modal-content input::placeholder,
@@ -291,7 +262,6 @@ color: white;
 
 .modal-content input {
   border: none;
-  border-bottom: 1px solid black;
   outline: none;
 }
 
@@ -307,7 +277,7 @@ color: white;
   outline: none;
   border: none;
   cursor: pointer;
-  color: #777303;
+  color: #000000;
   cursor: pointer;
 }
 
@@ -315,7 +285,7 @@ color: white;
   color: black;
 }
 .modal-content .btn2 {
-  background: rgb(21, 104, 21);
+  background: rgb(14, 14, 14);
   border: none;
   outline: none;
   color: white;

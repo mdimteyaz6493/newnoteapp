@@ -12,6 +12,9 @@ import { IoMdClose } from "react-icons/io";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoMdHeart } from "react-icons/io";
 import { ToastContainer, toast, Bounce, Slide } from "react-toastify";
+import { BiSortDown } from "react-icons/bi";
+import { BiSortUp } from "react-icons/bi";
+
 
 const Notes = () => {
   const [notes, setNotes] = useState([]);
@@ -23,8 +26,7 @@ const Notes = () => {
   const [showSort, setShowSort] = useState(false);
   const [showFavorites, setShowFavorites] = useState(false);
   const [sortOrder, setSortOrder] = useState("oldest"); // Sorting state
-  const [selectedColor, setSelectedColor] = useState("paper"); // Default yellow
-  const [headcolor, setHeadcolor] = useState("#F4BB44");
+  const [uitheme, setuiTheme] = useState("light"); // Theme state
   const [currentNote, setCurrentNote] = useState({
     id: null,
     title: "",
@@ -74,36 +76,6 @@ const Notes = () => {
   const handleSort = (order) => {
     setSortOrder(order);
     setShowSort(false);
-    setshowMenu(false);
-  };
-
-  // Function to handle color change (excluding paper change)
-  const handleColorChange = (color) => {
-    if (color === "paper") {
-      setSelectedColor("paper");
-      setHeadcolor("#F4BB44");
-      return setShowColor(false), setshowMenu(false);
-    }
-
-    const colors = {
-      yellow: "#F0E68C",
-      green: "#ACE1AF",
-      orange: "#FFE5B4",
-      pink: "#FFC0CB",
-      purple: "#E6E6FA",
-    };
-
-    const headColors = {
-      yellow: "#FEBE10",
-      green: "#1CAC78",
-      orange: "#F89880",
-      pink: "#F9629F",
-      purple: "#CF9FFF",
-    };
-
-    setSelectedColor(colors[color] || "#FFFF00");
-    setHeadcolor(headColors[color] || "#FEBE10");
-    setShowColor(false);
     setshowMenu(false);
   };
 
@@ -254,8 +226,13 @@ const Notes = () => {
     ? notes.filter((note) => note.isFavorite)
     : notes;
 
+  const toggleTheme = () => {
+    setuiTheme((prev) => (prev === "light" ? "dark" : "light"));
+   alert(uitheme)
+  };
+
   return (
-    <div className="main-notes-cont">
+    <div className={`main-notes-cont ${uitheme}`}>
       <div className="notes-cont-head">
         {showMenu ? (
           <IoMdClose
@@ -271,71 +248,15 @@ const Notes = () => {
         <div className={showMenu ? "menu show" : "menu"}>
           <>
             <div className="num_notes">Total Notes : {notes.length}</div>
-            <div className="menu_cont">
-              <span
-                className="menu_title"
-                onClick={() => setShowColor((prev) => !prev)}
-              >
-                Color
-              </span>
-              <ul
-                className={showColor ? "menu_option show_menu" : "menu_option"}
-              >
-                {["yellow", "green", "orange", "pink", "purple", "paper"].map(
-                  (color) => (
-                    <li key={color} onClick={() => handleColorChange(color)}>
-                      <div
-                        style={{
-                          backgroundColor: color !== "paper" ? color : "white",
-                          backgroundImage:
-                            color === "paper"
-                              ? "repeating-linear-gradient(white, white 23px, #d3d3d3 25px)"
-                              : "none",
-                        }}
-                      ></div>
-                      <span>{color}</span>
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-            <div className="menu_cont">
-              <span
-                className="menu_title"
-                onClick={() => setShowSort((prev) => !prev)}
-              >
-                Sort By
-              </span>
-              <ul
-                className={showSort ? "menu_option show_menu" : "menu_option"}
-              >
-                <li
-                  className={sortOrder === "newest" ? "active" : ""}
-                  onClick={() => handleSort("newest")}
-                >
-                  Newest
-                </li>
-                <li
-                  className={sortOrder === "oldest" ? "active" : ""}
-                  onClick={() => handleSort("oldest")}
-                >
-                  Oldest
-                </li>
-              </ul>
-            </div>
-            <div className="menu_cont">
-              <button
+            <button
                 onClick={() => setShowFavorites((prev) => !prev)}
                 className="menu_btn"
               >
                 {showFavorites ? "All Notes" : "Favorites"}
               </button>
-              {!showFavorites && (
-                <span className="no_fav">
-                  {notes.filter((note) => note.isFavorite).length}
-                </span>
-              )}
-            </div>
+              {/* <button onClick={toggleTheme} className="theme-toggle-btn">
+          Switch to {uitheme === "light" ? "Dark" : "Light"} Theme
+        </button> */}
           </>
         </div>
       </div>
@@ -360,8 +281,6 @@ const Notes = () => {
             note={note}
             toggleFavorite={toggleFavorite}
             openViewModal={openViewModal}
-            selectedColor={selectedColor}
-            headcolor={headcolor}
             convertToLinks={convertToLinks}
           />
         ))}
@@ -401,7 +320,7 @@ const Notes = () => {
         <div className="show-note-modal">
           <div className="note-modal-contents">
             <div className="note-modal-head">
-              <h3>{currentNote.title}</h3>
+              <span>{currentNote.title}</span>
               <div className="note-modal-actions">
                 <button onClick={openEditModal}>
                   <MdEditNote />
@@ -449,30 +368,19 @@ const Notes = () => {
 const NoteItem = ({
   note,
   openViewModal,
-  selectedColor,
-  headcolor,
   convertToLinks,
   toggleFavorite,
+  uitheme
+  
 }) => {
-  const backgroundStyle =
-    selectedColor === "paper"
-      ? {
-          background:
-            "repeating-linear-gradient(white, white 23px, #d3d3d3 25px)",
-        }
-      : { backgroundColor: selectedColor };
 
   return (
-    <div className="note" style={backgroundStyle}>
-      <div className="note-head" style={{ backgroundColor: headcolor }}>
+    <div className={`note ${uitheme}`} onClick={() => openViewModal(note)}>
+      <div className="note-head">
         <h3>{note.title}</h3>
         <button onClick={() => toggleFavorite(note._id)} className="fav-btn">
           {note.isFavorite ? <IoMdHeart color="red" /> : <IoMdHeartEmpty />}
         </button>
-        <MdOpenInNew
-          className="open_icon"
-          onClick={() => openViewModal(note)}
-        />
       </div>
       <div className="note-content">
         <p style={{ whiteSpace: "pre-wrap" }}>

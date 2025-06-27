@@ -19,14 +19,9 @@
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background-color: #12c5f1; 
+  background-color: #cacaca; 
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #b900de; 
-  cursor: pointer;
-}
 
 .main_cont{
   /* background-color: #fffa65; */
