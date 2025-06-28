@@ -1,6 +1,6 @@
 .main-notes-cont {
-  min-height: 100vh;
   background-color: rgb(255, 255, 255);
+  min-height: 100vh;
 }
 .main-notes-cont.dark{
   background-color: rgb(0, 0, 0);
@@ -11,16 +11,21 @@
   z-index: 500000;
 }
 .notes-cont-head {
-  height: 40px;
+  height: 50px;
   display: flex;
   justify-content: space-between;
   padding: 0px 10px;
   background-color: rgb(255, 255, 255);
-  border-bottom: 1px solid rgb(208, 208, 208);
+  position: fixed;
+  width: 100%;
+  top: 50px;
 }
-
+.main-notes-cont.dark .notes-cont-head{
+  background-color: black;
+  border-bottom: none;
+}
 .notes-cont-head .menu {
-  width: 80%;
+  width: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -40,9 +45,12 @@
   border-radius: 5px;
   font-size: 1rem;
   font-weight: 400;
-  margin-right: 20px;
+  margin-right: 0px;
 }
-
+.main-notes-cont.dark .notes-cont-head .menu .num_notes{
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
 .menu_btn{
   background:none;
   outline:none;
@@ -53,38 +61,50 @@
   text-align: start;
   padding: 5px 10px;
   border-radius: 5px;
+  background-color: rgb(239, 237, 237);
 }
 .menu_btn:hover{
-    background-color: rgb(239, 237, 237);
+    background-color: rgb(205, 204, 204);
 }
 
+.main-notes-cont.dark .notes-cont-head .menu .menu_btn{
+   background-color: #2c2c2c;
+  color: #ffffff;
+}
+.main-notes-cont.dark .notes-cont-head .menu .menu_btn:hover{
+  background-color: #424242;
+}
 
 .add_btn {
-  position: absolute;
-  top: 80px;
+  position: fixed;
+  top: 45px;
   right: 20px;
   cursor: pointer;
-  font-size: 60px;
+  font-size: 50px;
   width: 60px;
   height: 60px;
   background: none;
   outline: none;
   border: none;
-  color: rgb(159, 167, 141);
+  color: rgb(111, 111, 111);
   transition: 0.2s ease;
-  background-color: white;
+  background-color:none;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 .add_btn:hover {
   color: black;
 }
+.main-notes-cont.dark .add_btn:hover{
+color: white;
+}
+
 .notes-container {
-  min-height: calc(100vh - 140px);
   width: 100%;
-    margin: 20px auto;
+    margin: 100px auto;
     columns: 6;
     column-gap: 5px;
     padding: 20px;
@@ -105,9 +125,11 @@
   border-radius: 10px;
   margin: 10px 5px;
 }
-.note.dark {
-  background-color: #000000;
-} 
+.note.dark{
+  background-color: #2c2c2c;
+  border: none;
+  color: #c8c8c8;
+}
 .note-head {
   background-color: #ffffff;
   width: 100%;
@@ -118,6 +140,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 0px 10px;
+}
+.note.dark .note-head{
+  background-color: #2c2c2c;
+  color: rgb(193, 193, 193);
 }
 .note-head h3 {
   font-size: 0.9rem;
@@ -142,6 +168,9 @@
 .fav-btn:hover{
   scale: 1.6;
 }
+.note.dark .fav-btn{
+color: rgb(105, 105, 105);
+}
 .note-content {
   height: calc(100% - 50px);
   width: 100%;
@@ -150,7 +179,10 @@
   cursor: text;
   background-color: white;
 }
-
+.note.dark .note-content{
+  background-color: #2c2c2c;
+color: rgb(193, 193, 193);
+}
 .create-note-modal {
   position: fixed;
   top: 0;
@@ -161,6 +193,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.create-note-modal.dark{
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
 }
 
 .show-note-modal {
@@ -186,7 +222,11 @@
   overflow: hidden;
   border: 1px solid rgb(190, 190, 190);
   border-radius: 10px;
-  
+}
+.show-note-modal .note-modal-contents.dark{
+  background-color: #242424;
+  border: none;
+  color: rgb(197, 197, 197);
 }
 .show-note-modal .note-modal-contents .note-modal-head {
   height: 50px;
@@ -198,6 +238,11 @@
   text-transform: capitalize;
   font-weight: 400;
   font-size: 1rem;
+}
+.show-note-modal .note-modal-contents.dark .note-modal-head{
+  background-color: #242424;
+  border: none;
+  color: rgb(197, 197, 197);
 }
 .show-note-modal
   .note-modal-contents
@@ -213,6 +258,10 @@
   color: #050505;
   transition: 0.2s ease-in-out;
 }
+.show-note-modal .note-modal-contents.dark .note-modal-head .note-modal-actions
+  button {
+  color: rgb(114, 114, 114);
+}
 .show-note-modal
   .note-modal-contents
   .note-modal-head
@@ -220,6 +269,11 @@
   button:hover {
   color: black;
   font-weight: 600;
+}
+
+.show-note-modal .note-modal-contents.dark .note-modal-head .note-modal-actions
+  button:hover {
+  color: rgb(185, 184, 184);
 }
 .show-note-modal .note-modal-contents .note-modal-content {
   height: calc(100% - 50px);
@@ -234,26 +288,38 @@
  max-height: 700px;
   background: #ffffff;
   padding: 20px;
-  width: 400px;
+  width: 500px;
   text-align: start;
   position: relative;
-  border-radius: 10px;
+  border-radius: 5px;
   border: 1px solid rgb(205, 205, 205);
+}
+.modal-content.dark{
+  background-color: #242424;
+  border: none;
 }
 .modal-content input,
 .modal-content textarea {
   width: 100%;
   margin: 10px 0;
   padding: 8px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   background: #ffffff;
   color: black;
+}
+.modal-content.dark input,
+.modal-content.dark textarea {
+ background-color: #242424;
+  color: white;
 }
 .modal-content input::placeholder,
 .modal-content textarea::placeholder {
   color: black;
 }
-
+.modal-content.dark input::placeholder,
+.modal-content.dark textarea::placeholder {
+  color: rgb(159, 159, 159);
+}
 .modal-content textarea {
   height: 300px;
   border: none;
@@ -295,14 +361,19 @@
   right: 40%;
   border-radius: 5px;
 }
+.modal-content.dark .buttons button{
+  color: rgb(125, 125, 125);
+}
 
 @media (max-width: 400px) {
   .notes-container {
-    padding: 50px 50px;
+    columns: 2;
+    column-gap: 5px;
+    padding: 10px;
   }
   .note {
-    width: 300px;
-    height: 450px;
+    width: 100%;
+    height: auto;
   }
   .modal-content {
     width: 350px;
@@ -312,94 +383,26 @@
     text-align: start;
     overflow: hidden;
   }
-  .notes-cont-head .menu {
-    width: 60%;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 10px 20px;
-    background-color: #e9b59c;
-    height: 100vh;
-    z-index: 1;
-    position: fixed;
-    left: 0;
-    transform:translateX(-300px) ;
-    transition: 0.2s ease ;
-    box-shadow: 5px 5px 10px rgb(0, 0, 0,0.5);
-  }
-  .num_notes{
-    margin-left: 50px;
-  }
-  .notes-cont-head .menu.show{
-    display: flex;
-    transform:translateX(0px) ;
-  }
-  .notes-cont-head .menu_icon{
-    display: block;
-    position: absolute;
-  top: 70px;
-  left: 20px;
+  .menu_btn{
+  background:none;
+  outline:none;
+  border: none;
   cursor: pointer;
-  font-size: 30px;
-  cursor: pointer;
-  z-index: 2;
-  }
-  .notes-cont-head .menu .menu_cont {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-  }
-  .notes-cont-head .menu .menu_cont .menu_title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    cursor: pointer;
-    position: relative;
-    user-select: none;
-  }
-  .notes-cont-head .menu .menu_cont .menu_option{
-    position: static;
-    width: 100%;
-    border-radius: 0px;
-    box-shadow: none;
-    z-index: 1;
-    display: block;
-    margin-top: 20px;
-    background-color: #fdd3c0;
-  }
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-align: start;
+  padding: 0px 5px;
+  border-radius: 5px;
+  background-color: rgb(239, 237, 237);
+  height: 30px;
+}
 
-  .notes-cont-head .menu .menu_option li {
-    height: 30px;
-    list-style: none;
-    border-bottom: 1px solid gray;
-    margin-top: 10px;
-    text-align: center;
-    text-transform: capitalize;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-  }
-  .notes-cont-head .menu .menu_option span {
-    width: 70%;
-    font-size: 1.1rem;
-  }
-  .notes-cont-head .menu .menu_cont .menu_option li div {
-    height: 25px;
-    width: 25px;
-    background-color: red;
-  }
-  .notes-cont-head .menu .menu_cont:nth-child(4){
-    width: 50%;
-    justify-content: start;
-    align-items: flex-start;
-  }
-
-  .no_fav{
-  position: absolute;
-  right: -5px;
-  top: -2px;
-  }
+.add_btn {
+  position: fixed;
+  top: 800px;
+  right: 20px;
+  background-color: black;
+  color: white;
+  padding: 0px;
+}
 }

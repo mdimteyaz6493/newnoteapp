@@ -228,11 +228,13 @@ const Notes = () => {
 
   const toggleTheme = () => {
     setuiTheme((prev) => (prev === "light" ? "dark" : "light"));
-   alert(uitheme)
   };
 
   return (
     <div className={`main-notes-cont ${uitheme}`}>
+     <button onClick={openAddModal} className="add_btn">
+          <IoAddCircleOutline />
+        </button>
       <div className="notes-cont-head">
         {showMenu ? (
           <IoMdClose
@@ -254,17 +256,14 @@ const Notes = () => {
               >
                 {showFavorites ? "All Notes" : "Favorites"}
               </button>
-              {/* <button onClick={toggleTheme} className="theme-toggle-btn">
-          Switch to {uitheme === "light" ? "Dark" : "Light"} Theme
-        </button> */}
+              <button onClick={toggleTheme} className="menu_btn">
+          {uitheme === "light" ? "Dark" : "Light"} Theme
+        </button>
           </>
         </div>
       </div>
 
       <div className="notes-container">
-        <button onClick={openAddModal} className="add_btn">
-          <IoAddCircleOutline />
-        </button>
         {/* {notes.map((note) => (
           <NoteItem 
             key={note._id} 
@@ -282,14 +281,15 @@ const Notes = () => {
             toggleFavorite={toggleFavorite}
             openViewModal={openViewModal}
             convertToLinks={convertToLinks}
+            uitheme={uitheme}
           />
         ))}
       </div>
       {/* Add/Edit Modal */}
       {modalOpen && (
-        <div className="create-note-modal">
-          <div className="modal-content">
-            <h3>{isEditing ? "Edit Note" : "Add Note"}</h3>
+        <div className={`create-note-modal ${uitheme}`}>
+          <div className={`modal-content ${uitheme}`}>
+            <span>{isEditing ? "Edit Note" : "Add Note"}</span>
             <input
               value={currentNote.title}
               placeholder="Title"
@@ -318,7 +318,7 @@ const Notes = () => {
 
       {viewModalOpen && (
         <div className="show-note-modal">
-          <div className="note-modal-contents">
+          <div className={`note-modal-contents ${uitheme}`}>
             <div className="note-modal-head">
               <span>{currentNote.title}</span>
               <div className="note-modal-actions">
