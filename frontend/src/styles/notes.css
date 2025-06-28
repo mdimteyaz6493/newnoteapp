@@ -366,6 +366,9 @@ color: rgb(193, 193, 193);
 }
 
 @media (max-width: 400px) {
+  .main-notes-cont {
+  height: auto;
+}
   .notes-container {
     columns: 2;
     column-gap: 5px;
@@ -388,10 +391,10 @@ color: rgb(193, 193, 193);
   outline:none;
   border: none;
   cursor: pointer;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 500;
   text-align: start;
-  padding: 0px 5px;
+  padding: 0px 10px;
   border-radius: 5px;
   background-color: rgb(239, 237, 237);
   height: 30px;
@@ -399,10 +402,38 @@ color: rgb(193, 193, 193);
 
 .add_btn {
   position: fixed;
-  top: 800px;
+  top: 750px;
   right: 20px;
   background-color: black;
   color: white;
   padding: 0px;
+}
+
+.notes-cont-head {
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 10px;
+  background-color: rgb(255, 255, 255);
+  position: fixed;
+  width: 100%;
+  top: 50px;
+  padding: 0px;
+}
+.notes-cont-head .menu {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 0px 10px;
+}
+
+.show-note-modal .note-modal-contents {
+ background-color: white;
+  height: 100vh;
+  max-height: 100vh;
+  width: 100%;
+  border-radius: 0px;
 }
 }
