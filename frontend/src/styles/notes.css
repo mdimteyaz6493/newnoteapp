@@ -402,11 +402,12 @@ color: rgb(193, 193, 193);
 
 .add_btn {
   position: fixed;
-  top: 750px;
+  top: 650px;
   right: 20px;
   background-color: black;
   color: white;
   padding: 0px;
+  z-index: 10000;
 }
 
 .notes-cont-head {
@@ -431,7 +432,7 @@ color: rgb(193, 193, 193);
 
 .show-note-modal .note-modal-contents {
  background-color: white;
-  height: 100vh;
+  height: 90vh;
   max-height: 100vh;
   width: 100%;
   border-radius: 0px;
