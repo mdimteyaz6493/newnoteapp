@@ -14,6 +14,8 @@ import { IoMdHeart } from "react-icons/io";
 import { ToastContainer, toast, Bounce, Slide } from "react-toastify";
 import { BiSortDown } from "react-icons/bi";
 import { BiSortUp } from "react-icons/bi";
+import { IoMdAdd } from "react-icons/io";
+
 
 
 const Notes = () => {
@@ -229,26 +231,20 @@ const Notes = () => {
   const toggleTheme = () => {
     setuiTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
-
+useEffect(() => {
+  if (uitheme === "dark") {
+    document.body.style.backgroundColor = "black";
+  } else {
+    document.body.style.backgroundColor = "rgb(239, 239, 239)";
+  }
+}, [uitheme]);
   return (
     <div className={`main-notes-cont ${uitheme}`}>
      <button onClick={openAddModal} className="add_btn">
-          <IoAddCircleOutline />
+          <IoMdAdd />
         </button>
       <div className="notes-cont-head">
-        {showMenu ? (
-          <IoMdClose
-            className="menu_icon"
-            onClick={() => setshowMenu((prev) => !prev)}
-          />
-        ) : (
-          <IoMenu
-            className="menu_icon"
-            onClick={() => setshowMenu((prev) => !prev)}
-          />
-        )}
-        <div className={showMenu ? "menu show" : "menu"}>
-          <>
+        <div className="menu">
             <div className="num_notes">Total Notes : {notes.length}</div>
             <button
                 onClick={() => setShowFavorites((prev) => !prev)}
@@ -259,21 +255,11 @@ const Notes = () => {
               <button onClick={toggleTheme} className="menu_btn">
           {uitheme === "light" ? "Dark" : "Light"} Theme
         </button>
-          </>
+          
         </div>
       </div>
 
       <div className="notes-container">
-        {/* {notes.map((note) => (
-          <NoteItem 
-            key={note._id} 
-            note={note} 
-            openViewModal={openViewModal} 
-            selectedColor={selectedColor} 
-            headcolor={headcolor} 
-            convertToLinks={convertToLinks}
-          />
-        ))} */}
         {filteredNotes.map((note) => (
           <NoteItem
             key={note._id}
