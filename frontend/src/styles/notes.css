@@ -406,7 +406,9 @@ color: rgb(193, 193, 193);
 
 .add_btn {
   position: fixed;
-  top: 650px;
+  bottom: 60px;
+  height: 50px;
+  width: 50px;
   right: 20px;
   background-color: #fbbc04;
   color: white;
@@ -439,7 +441,7 @@ color: rgb(193, 193, 193);
   height: auto;
   max-height: 100vh;
   width: 90%;
-  border-radius: 0px;
+  border-radius: 5px;
 }
 .note-head h3 {
   font-size: 0.9rem;

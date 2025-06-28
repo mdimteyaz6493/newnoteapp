@@ -18,6 +18,7 @@ const Navbar = () => {
   return (
     <nav>
       <div className="logo">
+      <img src="writing.png" alt=""/>
       <Link to="/notes" className="aa">MyNotes</Link>
       </div>
      <div className="menu">

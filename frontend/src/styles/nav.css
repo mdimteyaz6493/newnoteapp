@@ -14,7 +14,13 @@ nav .logo {
   font-size: 1.2rem;
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   width: 40%;
+  gap: 5px;
+}
+nav .logo img{
+  height: 1.2rem;
+  filter: invert();
 }
 nav .logo .aa {
   color: rgb(255, 255, 255);
